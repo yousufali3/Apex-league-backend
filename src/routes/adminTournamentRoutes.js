@@ -17,7 +17,7 @@ router.post('/create', verifyToken('admin'), createTournament);
 router.post('/edit/:tournamentId', editTournament);
 router.post('/delete/:tournamentId', deleteTournament);
 router.get('/get-all-tournaments', getAllTournaments);
-router.put('/room-details/:tournamentId', verifyToken('admin'), addRoomDetails);
+router.put('/room-details/:tournamentId', addRoomDetails);
 router.put('/kills/:tournamentId', verifyToken('admin'), addKills);
 router.post('/finalize-winners/:tournamentId', finalizeWinners);
 
