@@ -1,4 +1,5 @@
 import { Tournament } from '../models/Tournament.js';
+import { calculateWinners } from '../services/ournamentResultService.js';
 
 export const addKills = async (req, res) => {
   try {
@@ -100,5 +101,16 @@ export const createTournament = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+export const finalizeWinners = async (req, res) => {
+  try {
+    const { tournamentId } = req.params;
+    const winners = await calculateWinners(tournamentId);
+    res.status(200).json({ message: 'Winners finalized', winners });
+  } catch (error) {
+    console.error('Error finalizing winners:', error);
+    res.status(500).json({ error: 'Failed to finalize winners' });
   }
 };

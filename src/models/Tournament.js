@@ -52,11 +52,11 @@ const tournamentSchema = new mongoose.Schema(
       default: 0,
     },
 
-    registeredPlayers: [registeredPlayerSchema], // for solo
-    registeredTeams: [registeredTeamSchema], // for duo/squad
-
+    registeredPlayers: [registeredPlayerSchema],
+    registeredTeams: [registeredTeamSchema],
     roomId: { type: String },
     roomPassword: { type: String },
+    winners: { type: [mongoose.Schema.Types.Mixed], default: [] },
   },
   { timestamps: true }
 );

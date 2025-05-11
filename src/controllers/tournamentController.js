@@ -60,9 +60,7 @@ export const getMyRegisteredTournaments = async (req, res) => {
         { 'registeredTeams.players.userId': userId },
         { 'registeredTeams.userId': userId },
       ],
-    })
-      .select('-registeredPlayers -registeredTeams') // Exclude registeredPlayers and registeredTeams
-      .sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 });
 
     res.status(200).json({ tournaments });
   } catch (error) {
@@ -73,12 +71,11 @@ export const getMyRegisteredTournaments = async (req, res) => {
 
 export const filterTournaments = async (req, res) => {
   try {
-    const { gameType, mode } = req.body;
-    console.log(gameType, mode, 'Game Type and Mode');
+    const { gameType, mode } = req.body || {};
 
     const filter = {};
-    if (gameType) filter.gameType = gameType;
-    if (mode) filter.mode = mode;
+    if (gameType && gameType !== '') filter.gameType = gameType;
+    if (mode && mode !== '') filter.mode = mode;
 
     const tournaments = await Tournament.find(filter).sort({ createdAt: -1 });
 

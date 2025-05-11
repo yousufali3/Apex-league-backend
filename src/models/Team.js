@@ -13,6 +13,8 @@ const registeredTeamSchema = new mongoose.Schema({
   },
   teamName: { type: String, required: true },
   players: [teamPlayerSchema], // 2 or 4 players depending on mode
+  kills: { type: Number, default: 0 }, // Total kills for the team
+  rank: { type: Number, default: 0 }, // Rank for the team
 });
 
 export default registeredTeamSchema;

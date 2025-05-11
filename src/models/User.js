@@ -8,7 +8,10 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     phone: String,
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
-    wallet: { type: Number, default: 0 },
+    wallet: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Wallet',
+    },
     otp: String,
     otpExpiry: Date,
   },

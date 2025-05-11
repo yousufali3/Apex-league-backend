@@ -8,6 +8,7 @@ import connectDB from './src/config/db.js';
 import authRoutes from './src/routes/auth.routes.js';
 import tournamentRoutes from './src/routes/tournamentRoutes.js';
 import adminTournamentRoutes from './src/routes/adminTournamentRoutes.js';
+import walletRoutes from './src/routes/wallet.routes.js';
 // Import Routes
 
 // Middleware Imports
@@ -33,6 +34,7 @@ connectDB(); // Connect to MongoDB
 app.use('/api/auth', authRoutes);
 app.use('/api/tournaments', tournamentRoutes);
 app.use('/api/admin/tournament', adminTournamentRoutes);
+app.use('/api/wallet', walletRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');

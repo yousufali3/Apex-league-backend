@@ -8,6 +8,8 @@ const registeredPlayerSchema = new mongoose.Schema({
   },
   username: { type: String, required: true },
   gameUid: { type: String, required: true },
+  kills: { type: Number, default: 0 },
+  rank: { type: Number, default: 0 },
 });
 
 export default registeredPlayerSchema;
