@@ -54,6 +54,8 @@ export const addRoomDetails = async (req, res) => {
 };
 
 export const createTournament = async (req, res) => {
+  console.log(req.body, 'This is body');
+
   try {
     const {
       title,
@@ -112,5 +114,15 @@ export const finalizeWinners = async (req, res) => {
   } catch (error) {
     console.error('Error finalizing winners:', error);
     res.status(500).json({ error: 'Failed to finalize winners' });
+  }
+};
+
+export const getAllTournaments = async (req, res) => {
+  try {
+    const tournaments = await Tournament.find().sort({ createdAt: -1 });
+    res.status(200).json({ tournaments });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
