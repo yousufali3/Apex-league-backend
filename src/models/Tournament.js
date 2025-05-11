@@ -28,7 +28,7 @@ const tournamentSchema = new mongoose.Schema(
     prizePool: { type: Number },
     prizeBreakup: prizeBreakupSchema,
     maxParticipants: { type: Number },
-    matchDateTime: { type: Date },
+    matchDateTime: { type: String, required: true },
     gameType: {
       type: String,
       enum: [
