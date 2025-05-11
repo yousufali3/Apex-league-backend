@@ -49,7 +49,8 @@ export const loginUser = async ({ email, password }) => {
   const user = await User.findOne({ email });
   const isMatch = user && (await user.matchPassword(password));
 
-  console.log(user); // Debugging line
+  const balance = await Wallet.findOne({ user: user._id });
+  console.log(balance, 'Balance from wallet');
 
   if (!isMatch) throw new Error('Invalid credentials');
 
@@ -58,7 +59,7 @@ export const loginUser = async ({ email, password }) => {
     name: user.name,
     email: user.email,
     role: user.role,
-    wallet: user.wallet,
+    wallet: balance.balance,
     phone: user.phone,
     token: generateToken(user),
   };
