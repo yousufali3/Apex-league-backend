@@ -21,7 +21,7 @@ router.post('/withdraw', verifyToken('user'), createWithdrawalRequest); // User 
 router.patch('/deposit/:walletId/:requestId', approveDeposit); // Admin approves/rejects deposit
 router.patch('/withdraw/:walletId/:requestId', approveWithdrawal); // Admin approves/rejects withdrawal
 
-router.get('/admin/pending-deposits', verifyToken('admin'), getPendingDeposits);
+router.get('/admin/pending-deposits', getPendingDeposits);
 router.get('/admin/pending-withdrawals', getPendingWithdrawals);
 
 router.get('/transactions', verifyToken('user'), getTransactionHistory);
