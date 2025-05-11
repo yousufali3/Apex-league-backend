@@ -53,14 +53,13 @@ export const loginUser = async ({ email, password }) => {
 
   if (!isMatch) throw new Error('Invalid credentials');
 
-  // return {
-  //   // _id: user._id,
-  //   // name: user.name,
-  //   // email: user.email,
-  //   // role: user.role,
-  //   // wallet: user.wallet,
-  //   // token: generateToken(user),
-  // };
-
-  return user;
+  return {
+    _id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    wallet: user.wallet,
+    phone: user.phone,
+    token: generateToken(user),
+  };
 };
