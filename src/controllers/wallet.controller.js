@@ -88,6 +88,7 @@ export const getTransactionHistory = async (req, res) => {
     }
 
     const history = {
+      balance: wallet.balance,
       deposits: wallet.depositRequests,
       withdrawals: wallet.withdrawalRequests,
     };

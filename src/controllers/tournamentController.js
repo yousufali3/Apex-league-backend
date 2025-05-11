@@ -102,26 +102,28 @@ export const registerSolo = async (req, res) => {
     if (tournament.participantsCount >= tournament.maxParticipants)
       return res.status(400).json({ message: 'Tournament is full' });
 
-    const alreadyRegistered = tournament.registeredPlayers.some(
-      (p) => p.userId.toString() === userId
-    );
-    if (alreadyRegistered)
-      return res.status(400).json({ message: 'Already registered' });
+    // const alreadyRegistered = tournament.registeredPlayers.some((p) => {
+    //   console.log(p.userId.toString(), userId);
 
-    // const wallet = await Wallet.findOne({ user: userId });
-    // if (!wallet) return res.status(400).json({ message: 'Wallet not found' });
+    //   p.userId.toString() === userId;
+    // });
+    // if (alreadyRegistered)
+    //   return res.status(400).json({ message: 'Already registered' });
 
-    // if (wallet.balance < tournament.entryFee)
-    //   return res.status(400).json({ message: 'Insufficient balance' });
+    const wallet = await Wallet.findOne({ user: userId });
+    if (!wallet) return res.status(400).json({ message: 'Wallet not found' });
+
+    if (wallet.balance < tournament.entryFee)
+      return res.status(400).json({ message: 'Insufficient balance' });
 
     // Deduct Entry Fee
-    // wallet.balance -= tournament.entryFee;
-    // wallet.transactions.push({
-    //   type: 'debit',
-    //   amount: tournament.entryFee,
-    //   description: `Entry fee for tournament: ${tournament.title}`,
-    // });
-    // await wallet.save();
+    wallet.balance -= tournament.entryFee;
+    wallet.transactions.push({
+      type: 'debit',
+      amount: tournament.entryFee,
+      description: `Entry fee for tournament: ${tournament.title}`,
+    });
+    await wallet.save();
 
     // Register player
     tournament.registeredPlayers.push({
@@ -146,6 +148,7 @@ export const registerTeam = async (req, res) => {
   try {
     const { tournamentId, teamName, players } = req.body;
     const userId = req.user.id;
+    console.log(userId, 'User ID from token');
 
     const tournament = await Tournament.findById(tournamentId);
     if (!tournament)
@@ -168,34 +171,39 @@ export const registerTeam = async (req, res) => {
       return res.status(400).json({ message: 'Tournament is full' });
     }
 
-    const alreadyRegistered = tournament.registeredTeams.some(
-      (p) => p.userId.toString() === userId
-    );
-    if (alreadyRegistered)
-      return res.status(400).json({ message: 'Already registered' });
+    // const alreadyRegistered = tournament.registeredTeams.some((p) => {
+    //   console.log(p), 'this is p';
 
-    const creatorId = players[0].userId;
-
-    // const wallet = await Wallet.findOne({ user: creatorId });
-    // if (!wallet) return res.status(400).json({ message: 'Wallet not found' });
-
-    // const totalFee = tournament.entryFee * expectedCount;
-
-    // if (wallet.balance < totalFee)
-    //   return res.status(400).json({ message: 'Insufficient balance' });
-
-    // // Deduct Entry Fee
-    // wallet.balance -= totalFee;
-    // wallet.transactions.push({
-    //   type: 'debit',
-    //   amount: totalFee,
-    //   description: `Team entry fee for tournament: ${tournament.title}`,
+    //   p.userId.toString() === userId;
     // });
-    // await wallet.save();
+    // if (alreadyRegistered)
+    //   return res.status(400).json({ message: 'Already registered' });
+
+    const creatorId = req.user.id;
+
+    console.log(creatorId, 'req.user');
+
+    const wallet = await Wallet.findOne({ user: creatorId });
+    console.log(wallet, 'wallet');
+    if (!wallet) return res.status(400).json({ message: 'Wallet not found' });
+
+    const totalFee = tournament.entryFee * expectedCount;
+
+    if (wallet.balance < totalFee)
+      return res.status(400).json({ message: 'Insufficient balance' });
+
+    // Deduct Entry Fee
+    wallet.balance -= totalFee;
+    wallet.transactions.push({
+      type: 'debit',
+      amount: totalFee,
+      description: `Team entry fee for tournament: ${tournament.title}`,
+    });
+    await wallet.save();
 
     // Add team to tournament
     tournament.registeredTeams.push({
-      userId,
+      userId: req.user._id,
       teamName,
       players,
     });
