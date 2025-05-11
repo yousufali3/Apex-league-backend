@@ -15,12 +15,30 @@ const depositRequestSchema = new mongoose.Schema({
 
 const withdrawalRequestSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
-  upiOrAccount: { type: String, required: true },
+
+  paymentMethod: {
+    type: String,
+    enum: ['upi', 'bank'],
+    required: true,
+  },
+
+  upiDetails: {
+    upiId: { type: String },
+  },
+
+  bankDetails: {
+    bankName: { type: String },
+    accountNumber: { type: String },
+    ifscCode: { type: String },
+    accountHolderName: { type: String },
+  },
+
   status: {
     type: String,
     enum: ['pending', 'approved', 'rejected'],
     default: 'pending',
   },
+
   requestedAt: { type: Date, default: Date.now },
   resolvedAt: Date,
 });

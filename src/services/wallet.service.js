@@ -47,8 +47,12 @@ const WalletService = {
   },
 
   // Create withdrawal request by user
-  withdraw: async (userId, { amount, upiOrAccount }) => {
-    if (!amount || amount <= 0 || !upiOrAccount) {
+  // Create withdrawal request by user
+  withdraw: async (
+    userId,
+    { amount, paymentMethod, upiDetails, bankDetails }
+  ) => {
+    if (!amount || amount <= 0 || !paymentMethod) {
       throw new Error('Invalid withdrawal request');
     }
 
@@ -56,7 +60,29 @@ const WalletService = {
     if (!wallet) throw new Error('Wallet not found');
     if (wallet.balance < amount) throw new Error('Insufficient balance');
 
-    wallet.withdrawalRequests.push({ amount, upiOrAccount });
+    // Basic validation for payment details
+    if (paymentMethod === 'upi') {
+      if (!upiDetails?.upiId) {
+        throw new Error('UPI ID is required for UPI withdrawals.');
+      }
+    } else if (paymentMethod === 'bank') {
+      const { bankName, accountNumber, ifscCode, accountHolderName } =
+        bankDetails || {};
+      if (!bankName || !accountNumber || !ifscCode || !accountHolderName) {
+        throw new Error('All bank details are required for bank withdrawals.');
+      }
+    } else {
+      throw new Error('Invalid payment method.');
+    }
+
+    // Add the withdrawal request to the wallet
+    wallet.withdrawalRequests.push({
+      amount,
+      paymentMethod,
+      upiDetails,
+      bankDetails,
+    });
+
     return await wallet.save();
   },
 

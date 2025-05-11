@@ -13,7 +13,7 @@ const router = express.Router();
 
 // User actions
 router.post('/deposit', verifyToken('user'), createDepositRequest); // User initiates deposit
-router.post('/withdraw', createWithdrawalRequest); // User initiates withdrawal
+router.post('/withdraw', verifyToken('user'), createWithdrawalRequest); // User initiates withdrawal
 
 // Admin actions
 router.patch('/deposit/:walletId/:requestId', approveDeposit); // Admin approves/rejects deposit
