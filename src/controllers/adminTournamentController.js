@@ -167,3 +167,17 @@ export const editTournament = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const deleteTournament = async (req, res) => {
+  try {
+    const { tournamentId } = req.params;
+
+    const tournament = await Tournament.findByIdAndDelete(tournamentId);
+    if (!tournament)
+      return res.status(404).json({ message: 'Tournament not found' });
+    res.status(200).json({ message: 'Tournament deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
