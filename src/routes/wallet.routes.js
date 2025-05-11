@@ -6,6 +6,7 @@ import {
   getPendingDeposits,
   getPendingWithdrawals,
   approveWithdrawal,
+  getTransactionHistory,
 } from '../controllers/wallet.controller.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
 
@@ -21,5 +22,7 @@ router.patch('/withdraw/:walletId/:requestId', approveWithdrawal); // Admin appr
 
 router.get('/admin/pending-deposits', verifyToken('admin'), getPendingDeposits);
 router.get('/admin/pending-withdrawals', getPendingWithdrawals);
+
+router.get('/transactions', verifyToken('user'), getTransactionHistory);
 
 export default router;

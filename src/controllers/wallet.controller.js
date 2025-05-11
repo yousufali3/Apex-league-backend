@@ -1,4 +1,5 @@
 import WalletService from '../services/wallet.service.js';
+import { Wallet } from '../models/Wallet.js';
 
 export const createDepositRequest = async (req, res) => {
   console.log(req);
@@ -71,6 +72,29 @@ export const getPendingWithdrawals = async (req, res) => {
   try {
     const withdrawals = await WalletService.getAllPendingWithdrawals();
     res.status(200).json({ data: withdrawals });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+export const getTransactionHistory = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const wallet = await Wallet.findOne({ user: userId });
+
+    if (!wallet) {
+      return res.status(404).json({ error: 'Wallet not found' });
+    }
+
+    const history = {
+      deposits: wallet.depositRequests,
+      withdrawals: wallet.withdrawalRequests,
+    };
+
+    res
+      .status(200)
+      .json({ message: 'Transaction history fetched', data: history });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
