@@ -9,6 +9,7 @@ import {
   getTransactionHistory,
 } from '../controllers/wallet.controller.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
+import { addRoomDetails } from '../controllers/adminTournamentController.js';
 
 const router = express.Router();
 
@@ -24,5 +25,5 @@ router.get('/admin/pending-deposits', verifyToken('admin'), getPendingDeposits);
 router.get('/admin/pending-withdrawals', getPendingWithdrawals);
 
 router.get('/transactions', verifyToken('user'), getTransactionHistory);
-
+router.post('/add-room-details', addRoomDetails);
 export default router;

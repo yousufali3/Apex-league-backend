@@ -126,3 +126,44 @@ export const getAllTournaments = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+export const editTournament = async (req, res) => {
+  try {
+    const { tournamentId } = req.params;
+    const {
+      title,
+      description,
+      mode,
+      map,
+      gameType,
+      entryFee,
+      prizePool,
+      prizeBreakup,
+      maxParticipants,
+      matchDateTime,
+    } = req.body;
+
+    const tournament = await Tournament.findById(tournamentId);
+    if (!tournament)
+      return res.status(404).json({ message: 'Tournament not found' });
+
+    tournament.title = title || tournament.title;
+    tournament.description = description || tournament.description;
+    tournament.mode = mode || tournament.mode;
+    tournament.map = map || tournament.map;
+    tournament.gameType = gameType || tournament.gameType;
+    tournament.entryFee = entryFee || tournament.entryFee;
+    tournament.prizePool = prizePool || tournament.prizePool;
+    tournament.prizeBreakup = prizeBreakup || tournament.prizeBreakup;
+    tournament.maxParticipants = maxParticipants || tournament.maxParticipants;
+    tournament.matchDateTime = matchDateTime || tournament.matchDateTime;
+
+    await tournament.save();
+    res
+      .status(200)
+      .json({ message: 'Tournament updated successfully', tournament });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
