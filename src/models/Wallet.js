@@ -1,6 +1,18 @@
 // models/wallet.model.js
 import mongoose from 'mongoose';
-// import { User } from './User.js'; // Assuming you have a User model
+
+const depositRequestSchema = new mongoose.Schema({
+  amount: { type: Number, required: true },
+  transactionId: { type: String, required: true },
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'rejected'],
+    default: 'pending',
+  },
+  requestedAt: { type: Date, default: Date.now },
+  resolvedAt: Date,
+});
+
 const withdrawalRequestSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   upiOrAccount: { type: String, required: true },
@@ -29,6 +41,7 @@ const walletSchema = new mongoose.Schema({
       createdAt: { type: Date, default: Date.now },
     },
   ],
+  depositRequests: [depositRequestSchema],
   withdrawalRequests: [withdrawalRequestSchema],
 });
 
