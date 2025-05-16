@@ -7,6 +7,9 @@ import {
   getAllTournaments,
   editTournament,
   deleteTournament,
+  updatePlayerResult,
+  updateTeamResult,
+  updateTournamentWinner,
 } from '../controllers/adminTournamentController.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
 
@@ -20,5 +23,9 @@ router.get('/get-all-tournaments', getAllTournaments);
 router.put('/room-details/:tournamentId', addRoomDetails);
 router.put('/kills/:tournamentId', verifyToken('admin'), addKills);
 router.post('/finalize-winners/:tournamentId', finalizeWinners);
+
+router.post('/update-player-result', updatePlayerResult);
+router.post('/update-team-result', updateTeamResult);
+router.post('/update-result', updateTournamentWinner);
 
 export default router;
