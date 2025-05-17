@@ -313,11 +313,10 @@ export const updateTournamentWinner = async (req, res) => {
       return res.status(404).json({ message: 'Tournament not found' });
 
     const userObjectId = new mongoose.Types.ObjectId(userId);
-
     // === SOLO Mode ===
     if (tournament.mode === 'solo') {
-      const player = tournament.registeredPlayers.find(
-        (p) => p.userId.toString() === userId
+      const player = tournament.registeredPlayers.find((p) =>
+        p.userId.equals(userObjectId)
       );
       if (!player)
         return res
@@ -330,6 +329,9 @@ export const updateTournamentWinner = async (req, res) => {
 
     // === DUO / SQUAD Mode ===
     else {
+      console.log(tournament.registeredTeams, 'This is teams');
+      console.log(userId, 'This is userId');
+
       const team = tournament.registeredTeams.find(
         (t) => t.userId.toString() === userId
       );
